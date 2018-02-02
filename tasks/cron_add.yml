@@ -14,7 +14,7 @@
     minute: "30"
     hour: "22"
     weekday: 1,4
-    job: /usr/bin/clamscan -i -r / --exclude-dir=/sys --log=/var/log/clamav/clamAV.log | logger -i -t clamav -p local2.info 2>&1
+    job: clamscan -i -r / --exclude-dir=/sys --log=/var/log/clamav/clamAV.log
 #- debug: var=backup_file
 
 #- name: Add freshclam update marker
@@ -29,5 +29,5 @@
     name: "ClamAV Signature Update"
     minute: "00"
     hour: "22"
-    job: /usr/sbin/freshclam --log=/var/log/clamav/freshclam/log | logger -i -t freshclam -p local2.info 2>&1
+    job: freshclam
   when: ansible_nodename != 'sec01.mgmt'
