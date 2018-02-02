@@ -1,0 +1,39 @@
+---
+- name: Verify latest version of ClamAV is installed (CentOS hosts)
+  yum:
+    name: clamav
+    state: latest
+  when: ansible_distribution == "CentOS" and ansible_distribution_major_version > '5'
+
+- name: Verify latest version of ClamAV is installed (Debian/Ubuntu hosts)
+  apt:
+    name: clamav
+    state: latest
+  when: ansible_distribution != "CentOS"
+
+- name: Verify latest version of freshclam is installed (CentOS hosts)
+  yum:
+    name: clamav-update
+    state: latest
+  when: ansible_distribution == "CentOS" and ansible_distribution_major_version > '5'
+
+- name: Verify latest version of freshclam is installed (Debian/Ubuntu hosts)
+  apt:
+    name: clamav-freshclam
+    state: latest
+  when: ansible_distribution != "CentOS"
+
+- name: Install correct freshclam.conf
+  copy:
+    src: freshclam.conf
+    dest: /etc/freshclam.conf
+    owner: root
+    group: root
+    mode: 0644
+    
+- name: Verify /var/log/clamav directory is present
+  file:
+    path: /var/log/clamav
+    state: directory
+    mode: 0755 
+  

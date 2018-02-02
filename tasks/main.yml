@@ -1,0 +1,3 @@
+---
+- include: install.yml
+- include: cron_add.yml

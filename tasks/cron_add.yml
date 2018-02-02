@@ -1,0 +1,33 @@
+---
+#- name: Add "ClamAV Sylog Event" marker cron job
+#  cron:
+#    name: "ClamAV Syslog Event"
+#    minute: "30"
+#    hour: "22"
+#    job: logger -i -t clamav -p local2.info "Starting ClamAV scan"
+#    backup: yes
+#  register: backup_file
+
+- name: Add "ClamAV Scan" cron job
+  cron:
+    name: "ClamAV Scan"
+    minute: "30"
+    hour: "22"
+    weekday: 1,4
+    job: /usr/bin/clamscan -i -r / --exclude-dir=/sys --log=/var/log/clamav/clamAV.log | logger -i -t clamav -p local2.info 2>&1
+#- debug: var=backup_file
+
+#- name: Add freshclam update marker
+#  cron:
+#    name: "ClamAV Update Syslog Event"
+#    minute: "00"
+#    hour: "22"
+#    job: logger -i -t freshclam -p local2.info "Starting ClamAV signature updates"
+
+- name: Add freshclam cron job
+  cron:
+    name: "ClamAV Signature Update"
+    minute: "00"
+    hour: "22"
+    job: /usr/sbin/freshclam --log=/var/log/clamav/freshclam/log | logger -i -t freshclam -p local2.info 2>&1
+  when: ansible_nodename != 'sec01.mgmt'

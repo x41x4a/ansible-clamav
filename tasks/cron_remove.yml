@@ -1,0 +1,16 @@
+---
+- name: Remove "ClamAV Syslog Event" marker cron job
+  cron:
+    name: "ClamAV Syslog Event"
+    backup: yes
+    state: absent
+  register: backup_file
+- name: Remove "ClamAV Scan" cron job
+  cron:
+    name: "ClamAV Scan"
+    state: absent
+- name: Remove "ClamAV Update" freshclam cron job
+  cron:
+    name: "ClamAV Update"
+    state: absent
+- debug: var=backup_file
